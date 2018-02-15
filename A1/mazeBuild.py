@@ -1,5 +1,5 @@
-# Random Maze Generator using Depth-first Search
 # http://en.wikipedia.org/wiki/Maze_generation_algorithm
+# Random Maze Generator using Depth-first Search
 # FB - 20121214
 import random
 from PIL import Image
