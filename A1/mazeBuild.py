@@ -38,6 +38,8 @@ while len(stack) > 0:
         stack.append((cx, cy))
     else: stack.pop()
 
+
+print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze]))
 # paint the maze
 for ky in range(imgy):
     for kx in range(imgx):
