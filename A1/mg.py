@@ -11,8 +11,8 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 # This sets the WIDTH and HEIGHT of each grid location
-WIDTH = 20
-HEIGHT = 20
+WIDTH = 10
+HEIGHT = 10
  
 # This sets the margin between each cell
 MARGIN = 5
@@ -109,27 +109,29 @@ done = False
 clock = pygame.time.Clock()
 while not done:
 	for event in pygame.event.get():  # User did something
-	    if event.type == pygame.QUIT:  # If user clicked close
-	        done = True  # Flag that we are done so we exit this loop
-	    elif event.type == pygame.MOUSEBUTTONDOWN:
-	       
-	        print("Click ", pos, "Grid coordinates: ", row, column)
-	    # Set the screen background
+		if event.type == pygame.QUIT:  # If user clicked close
+			done = True  # Flag that we are done so we exit this loop
+			#elif event.type == pygame.MOUSEBUTTONDOWN:
+
+	# Set the screen background
 	screen.fill(BLACK)
 	for row in range(maze.x):
 		for column in range(maze.y):
-       			color = BLACK
-           	if maze.maze[row][column] == 1:
-       		    color = WHITE
-          	pygame.draw.rect(screen,color,
-          		[(MARGIN + WIDTH) * column + MARGIN, 
-          		(MARGIN + HEIGHT) * row + MARGIN,
-          		WIDTH,
-          		HEIGHT])
- 
-    # Limit to 60 frames per second
-   	clock.tick(60)
+			color = BLACK
+			if maze.maze[row][column] == 1:
+				color = WHITE
+			if maze.start.x == row and maze.start.y == column:
+				color = GREEN
+			if maze.goal.x == row and maze.goal.y == column:
+				color = RED
+			pygame.draw.rect(screen,color,
+			[(MARGIN + WIDTH) * column + MARGIN, 
+			(MARGIN + HEIGHT) * row + MARGIN,
+			WIDTH,
+			HEIGHT])
 
-   	pygame.display.flip()
+	# Limit to 60 frames per second
+	clock.tick(60)
+	pygame.display.flip()
 
 pygame.quit()
