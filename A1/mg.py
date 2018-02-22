@@ -4,6 +4,7 @@ import random
 import sys
 import math
 import pygame
+import heapq
 
 dx = [0, 1, 0, -1]; dy = [-1, 0, 1, 0]
 BLACK = (0, 0, 0)
@@ -11,33 +12,40 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 # This sets the WIDTH and HEIGHT of each grid location
-WIDTH = 10
-HEIGHT = 10
+WIDTH =	8
+HEIGHT = 7
  
 # This sets the margin between each cell
-MARGIN = 5
+MARGIN = 1
 
-class Point(object):
+openSet = []
+closedSet = {}
+counter = 0
 
-	def __init__(self, x=0, y=0):
-		self.x = x
-		self.y = y
+class node():
+	def __init__(self, point, parent, g, h):
+		self.point = point
+		self.parent = parent
+		self.g = g
+		self.h = h
 
-		
-	@staticmethod
-	def randomPoint(x,y):
-		return Point(random.randint(0,x-1),random.randint(0,y-1))
+	def getf():
+		return self.g + self.h
+
+
+def randomPoint(x,y):
+	return (random.randint(0,x-1),random.randint(0,y-1))
 
 	
 
 def pointEquals(a,b):
-	if ( a.x == b.x and a.y == b.y ):
+	if ( a[0] == b[0] and a[1] == b[1] ):
 		return 1
 	else:
 		return 0
 
-def pointString(a):
-	return str(a.x) + "," + str(a.y)
+def heuristic_func(start,goal):
+    return abs(start[0]-goal[0]) + abs(start[1]-goal[1])
 
 #def dfstie(maze):
 
@@ -46,16 +54,15 @@ class Maze(object):
 		self.x = x
 		self.y = y
 		self.maze = [[0 for i in range(self.x)] for j in range(self.y)]
-		self.start = Point()
-		self.goal = Point()
-
+		self.start = node(None,None,None,None)
+		self.goal = node(None,None,None,None)
 	
 	#def dfsMaze():
 
 def generateMaze(m):
-	m.start = Point.randomPoint(m.x,m.y)
-	temp = Point.randomPoint(m.x,m.y)
-	stack = [(m.start.x,m.start.y)]
+	m.start.point = randomPoint(m.x,m.y)
+	temp = randomPoint(m.x,m.y)
+	stack = [(m.start.point[0],m.start.point[1])]
 	while len(stack) > 0:
 	    (cx, cy) = stack[-1]
 	    m.maze[cy][cx] = 1
@@ -78,11 +85,19 @@ def generateMaze(m):
 	        cx += dx[ir]; cy += dy[ir]
 	        stack.append((cx, cy))
 	    else: stack.pop()
-	while(pointEquals(m.start,temp) or m.maze[temp.x][temp.y] == 0):
-		temp = Point.randomPoint(m.x,m.y)
+	while(pointEquals(m.start.point,temp) or m.maze[temp[0]][temp[1]] == 0):
+		temp = randomPoint(m.x,m.y)
 		#print(pointString(temp) + "\n")
 	else:
-		m.goal = temp
+		m.goal.point = temp
+
+
+def computePath(start, goal):
+	
+	# Set of nodes to be evaluated
+	return 0
+	
+
 
 
 
@@ -94,19 +109,22 @@ else:
 	my = 101
 
 maze = Maze(mx,my)
+omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
 #print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
 generateMaze(maze)
 #print('\n')
 print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
 
+
 #print(pointString(maze.start) + "\n" + pointString(maze.goal))
 pygame.init()
-size =(1024,1024)
+size =((WIDTH+MARGIN)*maze.y,(WIDTH+HEIGHT)*maze.x)
 sq_size = 64
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("A*")
 done = False 
 clock = pygame.time.Clock()
+#Main program loop
 while not done:
 	for event in pygame.event.get():  # User did something
 		if event.type == pygame.QUIT:  # If user clicked close
@@ -120,9 +138,9 @@ while not done:
 			color = BLACK
 			if maze.maze[row][column] == 1:
 				color = WHITE
-			if maze.start.x == row and maze.start.y == column:
+			if maze.start.point[0] == row and maze.start.point[1] == column:
 				color = GREEN
-			if maze.goal.x == row and maze.goal.y == column:
+			if maze.goal.point[0] == row and maze.goal.point[1] == column:
 				color = RED
 			pygame.draw.rect(screen,color,
 			[(MARGIN + WIDTH) * column + MARGIN, 
