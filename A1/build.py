@@ -8,15 +8,20 @@ blockedBias = 100 - unblockedBias
 weight_list = [0] * unblockedBias +  [1] * blockedBias
 
 #of rows and columns
-x_size = 10 
-y_size = 10
+x_size = 101 
+y_size = 101
 
 directory = "tests/"
 file_head = "test"
 
 
 def create_testcase(version):
-	f = open(directory + file_head + str(version) + ".txt", 'w')
+	try:
+		filename = directory + file_head + str(version) + ".txt"
+		f = open(filename, 'w')
+	except FileNotFoundError:
+		print ("Could not find the directory or file: " + filename)
+		return
 
 	#writes values per column
 	for y in range(y_size):
@@ -30,8 +35,12 @@ def create_testcase(version):
 	f.close()
 
 def test_to_array(version):
-	filename = directory + file_head + version + ".txt"
-	f = open(filename)
+	try:
+		filename = directory + file_head + version + ".txt"
+		f = open(filename)
+	except FileNotFoundError:
+		print ("Could not find the file to open: " + filename)
+		return
 
 	#final 2d array
 	maze = []
@@ -45,13 +54,14 @@ def test_to_array(version):
 	return maze
 
 def main():
-# 	for i in range(50):
-# 		version = i+1
-# 		create_testcase(version)
+	# writing test cases - stored in directory labeled above
+	for i in range(50):
+		version = i+1
+		create_testcase(version)
 
-	test_num = input("which test case number (1-50) would you like to run?  ")
-	print(test_to_array(test_num))
-
+	# test_num = input("which test case number (1-50) would you like to run?  ")
+	# print(test_to_array(test_num))
+	tasks = None
 
 
 if __name__ == "__main__":
