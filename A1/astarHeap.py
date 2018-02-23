@@ -92,24 +92,26 @@ steps = 0
 goal = (15,15)
 start = (square_x,square_y)
 
+
+#Sets have the following traits - 
+#[(x coord,y coord), gscore, hscore]
 # Set of nodes already evaluated
-closedSet = PriorityQueue()
+closedSet = set()
 
 # Set of nodes to be evaluated
 openSet = PriorityQueue()
-openSet.put(start, math.inf)
+start_h = heuristic_Cost(start,goal)
+openSet.put(start, start_h)
+
 
 # For recovering the shortest Path
-cameFrom = [[(math.inf,math.inf) for x in range(16)]for y in range(16)]
-cameFrom[square_x][square_y] = start
+cameFrom = {}
 
 # Initalize gScore
-gScore = [[math.inf for x in range(16)]for y in range(16)]
-gScore[square_x][square_y] = 0
+gScore = {start:0}
 
 # Initalize fScore
-fScore = [[math.inf for x in range(16)]for y in range(16)]
-fScore[square_x][square_y] = heuristic_Cost((square_x,square_y),goal)
+fScore = {start:start_h}
 
 found = False
 finished_path = []
@@ -148,43 +150,37 @@ while not done:
                 print("STEPS: ",steps)
 
                 # A* loop
-                if openSet and  not found:
+                if openSet and not found:
 
                     #find the minimum fScore in openSet
                     current = openSet.get()
-                    print("Current fScore Value: ", fScore[current[0]][current[1]])
-                    print("Position: ", current)
+                    #current = [(x point, y point), gscore, heuristic]
+                    print("Current fScore Value: ", current[1] + current[2])
+                    print("Position: ", current[0])
 
                     # Check if Done
-                    if current == goal:
+                    if current[0] == goal:
                         print("DONE!!!")
                         found = True
 
-                    closedSet.put(current, )
+                    closedSet.add(current[0])
 
                     # Look at all possible Neighbors
                     for neighbor in getNeighbors(current):
-
-                        # Ignore if already looked at
-                        if neighbor in closedSet:
-                            continue
-
-                        # If not looked at, add to openList
-                        if neighbor not in openSet:
-                            openSet.add(neighbor)
-
-                        # If already looked at, check if score needs updating
+                        #finding gscore for neighbor
                         tentative_gScore = gScore[current[0]][current[1]] + 1
-                        if tentative_gScore >= gScore[neighbor[0]][neighbor[1]]:
+
+                        # Ignore if already looked at or if current path is longer
+                        if neighbor in closedSet and tentative_gScore >= gscore.get(neighbor,0):
                             continue
 
-                        #Best path yet, update
-                        gScore[neighbor[0]][neighbor[1]] = tentative_gScore
-                        fScore[neighbor[0]][neighbor[1]] = gScore[neighbor[0]][neighbor[1]]\
-                                                            + heuristic_Cost(neighbor,goal)
+                        # If not looked at, add to openList or if better path
+                        if tentative_gScore < gscore.get(neighbor,0) or gscore.get(neighbor, None) == None:
+                            cameFrom[neighbor] = current
+                            gscore[neighbor] = tentative_gscore
+                            fscore[neighbor] = tentative_gscore + heuristic_Cost(neighbor, goal)
+                            openSet.put(neighbor, fscore[neighbor])
 
-                        #Record Path
-                        cameFrom[neighbor[0]][neighbor[1]] = current
                 elif  found and start not in finished_path:
                     print("Position: ", current)
                     finished_path.append(current)
@@ -216,10 +212,10 @@ while not done:
                                 sq_size-2, sq_size-2])
 
     # Print light blue openSet squares
-    for position in openSet:
-        pygame.draw.rect(screen, LIGHTBLUE,  [position[0] * sq_size + 2,\
-                                position[1] * sq_size + 2,\
-                                sq_size-2, sq_size-2])
+    # for position in openSet:
+    #     pygame.draw.rect(screen, LIGHTBLUE,  [position[0] * sq_size + 2,\
+    #                             position[1] * sq_size + 2,\
+    #                             sq_size-2, sq_size-2])
     # Print gold finished Path
     for position in finished_path:
         pygame.draw.rect(screen, GOLD,  [position[0] * sq_size + 2,\
