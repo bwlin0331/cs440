@@ -8,7 +8,7 @@ blockedBias = 100 - unblockedBias
 weight_list = [0] * unblockedBias +  [1] * blockedBias
 
 #of rows and columns
-x_size = 10
+x_size = 10 
 y_size = 10
 
 def create_testcase(version):
