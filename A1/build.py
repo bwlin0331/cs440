@@ -11,8 +11,12 @@ weight_list = [0] * unblockedBias +  [1] * blockedBias
 x_size = 10 
 y_size = 10
 
+directory = "tests/"
+file_head = "test"
+
+
 def create_testcase(version):
-	f = open("tests/test" + str(version) + ".txt", 'w')
+	f = open(directory + file_head + str(version) + ".txt", 'w')
 
 	#writes values per column
 	for y in range(y_size):
@@ -25,7 +29,8 @@ def create_testcase(version):
 
 	f.close()
 
-def test_to_array(filename):
+def test_to_array(version):
+	filename = directory + file_head + version + ".txt"
 	f = open(filename)
 
 	#final 2d array
@@ -40,11 +45,12 @@ def test_to_array(filename):
 	return maze
 
 def main():
-	for i in range(50):
-		version = i+1
-		create_testcase(version)
+# 	for i in range(50):
+# 		version = i+1
+# 		create_testcase(version)
 
-	print(test_to_array("tests/test1.txt"))
+	test_num = input("which test case number (1-50) would you like to run?  ")
+	print(test_to_array(test_num))
 
 
 
