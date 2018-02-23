@@ -1,6 +1,7 @@
 import pygame
 import math
 import heapq
+from copy import copy
 
 pygame.init()
 
@@ -155,36 +156,36 @@ while not done:
                     #find the minimum fScore in openSet
                     current = openSet.get()
                     #current = [(x point, y point), gscore, heuristic]
-                    print("Current fScore Value: ", current[1] + current[2])
-                    print("Position: ", current[0])
+                    print("Current fScore Value: ", fScore[current])
+                    print("Position: ", current)
 
                     # Check if Done
-                    if current[0] == goal:
+                    if current == goal:
                         print("DONE!!!")
                         found = True
 
-                    closedSet.add(current[0])
+                    closedSet.add(current)
 
                     # Look at all possible Neighbors
                     for neighbor in getNeighbors(current):
                         #finding gscore for neighbor
-                        tentative_gScore = gScore[current[0]][current[1]] + 1
+                        tentative_gScore = gScore.get(neighbor, 0) + 1
 
                         # Ignore if already looked at or if current path is longer
-                        if neighbor in closedSet and tentative_gScore >= gscore.get(neighbor,0):
+                        if neighbor in closedSet and tentative_gScore >= gScore.get(neighbor,0):
                             continue
 
                         # If not looked at, add to openList or if better path
-                        if tentative_gScore < gscore.get(neighbor,0) or gscore.get(neighbor, None) == None:
+                        if tentative_gScore < gScore.get(neighbor,0) or gScore.get(neighbor, None) == None:
                             cameFrom[neighbor] = current
-                            gscore[neighbor] = tentative_gscore
-                            fscore[neighbor] = tentative_gscore + heuristic_Cost(neighbor, goal)
-                            openSet.put(neighbor, fscore[neighbor])
+                            gScore[neighbor] = tentative_gScore
+                            fScore[neighbor] = tentative_gScore + heuristic_Cost(neighbor, goal)
+                            openSet.put(neighbor, fScore[neighbor])
 
                 elif  found and start not in finished_path:
                     print("Position: ", current)
                     finished_path.append(current)
-                    current = cameFrom[current[0]][current[1]]
+                    current = cameFrom[current]
                 else:
                     print(len(finished_path))
 
@@ -205,6 +206,7 @@ while not done:
                                                     count_y * sq_size + 2,\
                                                     sq_size-2, sq_size-2])
 
+
     # Print blue looked at squares
     for position in closedSet:
         pygame.draw.rect(screen, BLUE,  [position[0] * sq_size + 2,\
@@ -212,6 +214,15 @@ while not done:
                                 sq_size-2, sq_size-2])
 
     # Print light blue openSet squares
+    openCopy = PriorityQueue()
+    try:
+        while True:
+            temp = openSet.get()
+            pygame.draw.rect(screen, LIGHTBLUE, [temp[0] * sq_size + 2, \
+                                temp[1] * sq_size + 2,\
+                                sq_size-2, sq_size-2])
+    except IndexError:
+        x = 1
     # for position in openSet:
     #     pygame.draw.rect(screen, LIGHTBLUE,  [position[0] * sq_size + 2,\
     #                             position[1] * sq_size + 2,\

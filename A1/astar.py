@@ -1,5 +1,5 @@
 import pygame
-import math
+from math import sqrt
 import heapq
 
 pygame.init()
@@ -9,7 +9,7 @@ pygame.init()
 bias = 2
 
 def heuristic_Cost(start,goal):
-    return math.sqrt(abs(goal[0] - start[0])**2 + abs(goal[1] - start[1])**2) * bias
+    return sqrt(abs(goal[0] - start[0])**2 + abs(goal[1] - start[1])**2) * bias
 
 def getNeighbors(current):
     temp = []
@@ -23,6 +23,7 @@ def getNeighbors(current):
         temp.append((current[0],current[1] + 1))
     return temp
 
+inf = float("inf")
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -85,15 +86,15 @@ closedSet = set()
 openSet = {start}
 
 # For recovering the shortest Path
-cameFrom = [[(math.inf,math.inf) for x in range(16)]for y in range(16)]
+cameFrom = [[(inf,inf) for x in range(16)]for y in range(16)]
 cameFrom[square_x][square_y] = start
 
 # Initalize gScore
-gScore = [[math.inf for x in range(16)]for y in range(16)]
+gScore = [[inf for x in range(16)]for y in range(16)]
 gScore[square_x][square_y] = 0
 
 # Initalize fScore
-fScore = [[math.inf for x in range(16)]for y in range(16)]
+fScore = [[inf for x in range(16)]for y in range(16)]
 fScore[square_x][square_y] = heuristic_Cost((square_x,square_y),goal)
 
 found = False
