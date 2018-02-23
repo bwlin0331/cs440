@@ -13,7 +13,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH =	8
-HEIGHT = 7
+HEIGHT = 8
  
 # This sets the margin between each cell
 MARGIN = 1
@@ -61,18 +61,17 @@ class Maze(object):
 	#def dfsMaze():
 
 def generateMaze(m):
-	m.start.point = randomPoint(m.x,m.y)
 	temp = randomPoint(m.x,m.y)
-	stack = [(m.start.point[0],m.start.point[1])]
+	stack = [temp]
 	visited_set = set()
-	visited_set.add(((m.start.point[0],m.start.point[1])))
+	visited_set.add(((temp[0],temp[1])))
 	while len(stack) > 0:
 	    (cx, cy) = stack[-1]
-	    visited_set.add((cx, cy))
+	    visited_set.add((cx, cy))	
 	    if random.random() < .30:
-	    	m.maze[cy][cx] = 0
+	    	m.maze[cx][cy] = 0
 	    else: 
-	    	m.maze[cy][cx] = 1
+	    	m.maze[cx][cy] = 1
 
 	    # find a new cell to add
 	    nlst = [] # list of available neighbors
@@ -88,11 +87,7 @@ def generateMaze(m):
 	        cx += dx[ir]; cy += dy[ir]
 	        stack.append((cx, cy))
 	    else: stack.pop()
-	while(pointEquals(m.start.point,temp) or m.maze[temp[0]][temp[1]] == 0):
-		temp = randomPoint(m.x,m.y)
-		#print(pointString(temp) + "\n")
-	else:
-		m.goal.point = temp
+	
 
 
 def computePath(start, goal):
@@ -102,57 +97,68 @@ def computePath(start, goal):
 	
 
 
+mx = 101
 
-
-if len(sys.argv) > 1:
-	mx = int(sys.argv[1])
-	my = int(sys.argv[2])
-else:
-	mx = 101
-	my = 101
-
+my = 101
 maze = Maze(mx,my)
-omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
+
+
+
+
+#omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
 #print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
-generateMaze(maze)
+for i in range (1,51):
+	generateMaze(maze)
+	f = open('testcases/testcase'+str(i),'w')
+	f.write('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
+	f.close()
+
 #print('\n')
-print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
+#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
+maze.start.point = randomPoint(mx,my)
+maze.maze[maze.start.point[0]][maze.start.point[1]] = 1
+
+
+maze.goal.point = randomPoint(mx,my)
+while(pointEquals(maze.start.point,maze.goal.point)):
+		maze.goal.point = randomPoint(mx,my)
+maze.maze[maze.goal.point[0]][maze.goal.point[1]] = 1
 
 
 #print(pointString(maze.start) + "\n" + pointString(maze.goal))
-pygame.init()
-size =((WIDTH+MARGIN)*maze.y,(WIDTH+HEIGHT)*maze.x)
-sq_size = 64
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("A*")
-done = False 
-clock = pygame.time.Clock()
-#Main program loop
-while not done:
-	for event in pygame.event.get():  # User did something
-		if event.type == pygame.QUIT:  # If user clicked close
-			done = True  # Flag that we are done so we exit this loop
-			#elif event.type == pygame.MOUSEBUTTONDOWN:
+# pygame.init()
+# size =((WIDTH+MARGIN)*maze.y,(WIDTH+HEIGHT)*maze.x)
+# sq_size = 64
+# screen = pygame.display.set_mode(size)
+# pygame.display.set_caption("A*")
+# done = False 
+# clock = pygame.time.Clock()
+# #Main program loop
+# while not done:
+# 	for event in pygame.event.get():  # User did something
+# 		if event.type == pygame.QUIT:  # If user clicked close
+# 			done = True  # Flag that we are done so we exit this loop
+# 			#elif event.type == pygame.MOUSEBUTTONDOWN:
 
-	# Set the screen background
-	screen.fill(BLACK)
-	for row in range(maze.x):
-		for column in range(maze.y):
-			color = BLACK
-			if maze.maze[row][column] == 1:
-				color = WHITE
-			if maze.start.point[0] == row and maze.start.point[1] == column:
-				color = GREEN
-			if maze.goal.point[0] == row and maze.goal.point[1] == column:
-				color = RED
-			pygame.draw.rect(screen,color,
-			[(MARGIN + WIDTH) * column + MARGIN, 
-			(MARGIN + HEIGHT) * row + MARGIN,
-			WIDTH,
-			HEIGHT])
+# 	# Set the screen background
+# 	screen.fill(BLACK)
+# 	for row in range(maze.x):
+# 		for column in range(maze.y):
+# 			color = BLACK
+# 			if maze.maze[row][column] == 1:
+# 				color = WHITE
+# 			if maze.start.point[0] == row and maze.start.point[1] == column:
+# 				color = GREEN
+# 			if maze.goal.point[0] == row and maze.goal.point[1] == column:
+# 				color = RED
+# 			pygame.draw.rect(screen,color,
+# 			[(MARGIN + WIDTH) * column + MARGIN, 
+# 			(MARGIN + HEIGHT) * row + MARGIN,
+# 			WIDTH,
+# 			HEIGHT])
 
-	# Limit to 60 frames per second
-	clock.tick(60)
-	pygame.display.flip()
+# 	# Limit to 60 frames per second
+# 	clock.tick(60)
+# 	pygame.display.flip()
 
-pygame.quit()
+# pygame.quit()

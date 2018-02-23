@@ -14,3 +14,4 @@ Assignment 1 - ToDos
 			- repeated a* with small g
 			- repeated a* with forward
 			- repeated a* with backward
+			
