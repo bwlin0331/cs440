@@ -65,24 +65,23 @@ def generateMaze(m):
 	temp = randomPoint(m.x,m.y)
 	stack = [(m.start.point[0],m.start.point[1])]
 	visited_set = set()
-	#visited_set.add(((m.start.point[0],m.start.point[1])))
+	visited_set.add(((m.start.point[0],m.start.point[1])))
 	while len(stack) > 0:
 	    (cx, cy) = stack[-1]
-	    m.maze[cy][cx] = 1
+	    visited_set.add((cx, cy))
+	    if random.random() < .30:
+	    	m.maze[cy][cx] = 0
+	    else: 
+	    	m.maze[cy][cx] = 1
 
 	    # find a new cell to add
 	    nlst = [] # list of available neighbors
 	    for i in range(4):
 	        nx = cx + dx[i]; ny = cy + dy[i]
 	        if nx >= 0 and nx < m.x and ny >= 0 and ny < m.y:
-	            if m.maze[ny][nx] == 0:
+	            if (nx,ny) not in visited_set:
 	                # of occupied neighbors must be 1
-	                ctr = 0
-	                for j in range(4):
-	                    ex = nx + dx[j]; ey = ny + dy[j]
-	                    if ex >= 0 and ex < m.x and ey >= 0 and ey < m.y:
-	                        if m.maze[ey][ex] == 1: ctr += 1
-	                if ctr == 1: nlst.append(i)
+	                nlst.append(i)
 	    # if 1 or more neighbors available then randomly select one and move
 	    if len(nlst) > 0:
 	        ir = nlst[random.randint(0, len(nlst) - 1)]
