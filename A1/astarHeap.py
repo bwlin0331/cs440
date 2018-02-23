@@ -4,6 +4,20 @@ import heapq
 
 pygame.init()
 
+#implementing binary heap for sets
+class PriorityQueue:
+    def __init__(self):
+        self.elements = []
+    
+    def empty(self):
+        return len(self.elements) == 0
+    
+    def put(self, item, priority):
+        heapq.heappush(self.elements, (priority, item))
+    
+    def get(self):
+        return heapq.heappop(self.elements)[1]
+
 # Extra bias towards Heuristic Value
 # Try 1, 1.2, 1.5, 2, and 10
 bias = 2
@@ -79,10 +93,11 @@ goal = (15,15)
 start = (square_x,square_y)
 
 # Set of nodes already evaluated
-closedSet = set()
+closedSet = PriorityQueue()
 
 # Set of nodes to be evaluated
-openSet = {start}
+openSet = PriorityQueue()
+openSet.put(start, math.inf)
 
 # For recovering the shortest Path
 cameFrom = [[(math.inf,math.inf) for x in range(16)]for y in range(16)]
@@ -136,7 +151,7 @@ while not done:
                 if openSet and  not found:
 
                     #find the minimum fScore in openSet
-                    current = min(openSet, key=lambda x: fScore[x[0]][x[1]])
+                    current = openSet.get()
                     print("Current fScore Value: ", fScore[current[0]][current[1]])
                     print("Position: ", current)
 
@@ -145,9 +160,7 @@ while not done:
                         print("DONE!!!")
                         found = True
 
-
-                    openSet.discard(current)
-                    closedSet.add(current)
+                    closedSet.put(current, )
 
                     # Look at all possible Neighbors
                     for neighbor in getNeighbors(current):
