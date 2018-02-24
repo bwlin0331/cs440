@@ -164,7 +164,6 @@ def RFAS():
 				computePath(maze.goal,maze.start)
 			else:
 				computePath(maze.start,maze.goal)
-
 			end = time.time()
 			print('astar calculation took: ' + str(end-start))
 		else:
@@ -194,12 +193,11 @@ def computePath(start, goal):
 		tempf = {}
 		current = openSet.get()
 		#print (current)
-		if mode == "back":
-			if pointEquals(current, maze.start):
-				return construct_path(current)
-		else:
-			if pointEquals(current, maze.goal):
-				return construct_path(current)
+		
+		if pointEquals(current, goal):
+			return construct_path(current)
+		
+			
 		
 		closedSet.add(current)
 		nlst = [] # list of available neighbors
@@ -245,9 +243,9 @@ def construct_path(current):
 	while current in tree.keys():
 		current = tree[current]
 		if mode == "back":
-			total_path =  total_path + [current] 
+			total_path.append(current)
 		else:
-			total_path = [current] + total_path
+			total_path.insert(0,current)
 
 
 
@@ -257,7 +255,7 @@ def construct_path(current):
 
 
 #pass in testcase number as string, returns 2d array
-maze.maze = test_to_array("1")
+maze.maze = test_to_array("3")
 
 #omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
 #print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
