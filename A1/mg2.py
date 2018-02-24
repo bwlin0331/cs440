@@ -112,6 +112,7 @@ def generateMaze(m):
 
 gscore = {}
 fscore = {}
+hscore = {}
 tree = {}
 foundblocks = set()
 total_path = []
@@ -124,7 +125,7 @@ maxgscore = mx*my-1
 if len(sys.argv) > 1:
 	mode = sys.argv[1]
 def RFAS():
-	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks
+	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
 
 	if(not pointEquals(maze.start,maze.goal)):
 		gscore = {}
@@ -136,7 +137,10 @@ def RFAS():
 			
 		else:
 			gscore = {maze.start:0}
-			fscore = {maze.start:heuristic_func(maze.start,maze.goal)}
+			if mode == "adaptive" and maze.start in hscore:
+				fscore = {maze.start:hscore[maze.start]}
+			else:
+				fscore = {maze.start:heuristic_func(maze.start,maze.goal)}
 			gscore[maze.goal] = math.inf
 			
 		openSet.elements = []
@@ -151,6 +155,8 @@ def RFAS():
 			openSet.put(maze.start,maxgscore*fscore[maze.start] + gscore[maze.start])
 		if mode == "back":
 			openSet.put(maze.goal,fscore[maze.goal])
+		if mode == "adaptive":
+			openSet.put(maze.start,fscore[maze.start])
 		#updates observed blockings
 		for i in range(4):
 			next = (maze.start[0] + dx[i], maze.start[1] + dy[i])
@@ -187,7 +193,7 @@ def RFAS():
 		print('I am at the target')
 
 def computePath(start, goal):
-	global counter, maze, openSet, closedSet, gscore, fscore, tree, foundblocks
+	global counter, maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
 	while(not openSet.empty()):
 		tempg = {}
 		tempf = {}
@@ -213,9 +219,12 @@ def computePath(start, goal):
 
 			if not openSet.contains(succ):
 				gscore[succ] = gscore[current] + 1
-				fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
+				if mode == "adaptive" and succ in hscore:
+					fscore[succ] = gscore[succ] + hscore[succ]
+				else:
+					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 				tree[succ] = current
-				if not mode or mode == "back":
+				if not mode or mode == "back" or mode == "adaptive":
 					openSet.put(succ, fscore[succ])
 				if mode == "highg":
 					openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
@@ -228,7 +237,10 @@ def computePath(start, goal):
 				else:
 					tree[succ] = current
 					gscore[succ] = gscore[current] + 1
-					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
+					if mode == "adaptive" and succ in hscore:
+						fscore[succ] = gscore[succ] + hscore[succ]
+					else:
+						fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 					openSet.remove(succ)
 					if not mode or mode == "back":
 						openSet.put(succ, fscore[succ])
@@ -238,7 +250,8 @@ def computePath(start, goal):
 						openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
 
 def construct_path(current):
-	global maze, total_path
+	global maze, total_path, hscore
+	count = 0
 	total_path = [current]
 	while current in tree.keys():
 		current = tree[current]
@@ -246,6 +259,9 @@ def construct_path(current):
 			total_path.append(current)
 		else:
 			total_path.insert(0,current)
+			if mode == "adaptive":
+				hscore[current] = count
+				count += 1
 
 
 
