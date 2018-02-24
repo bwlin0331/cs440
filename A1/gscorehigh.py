@@ -1,5 +1,5 @@
 # Generates 2x2 matrix for maze using DFS random tiebreaking
-import time
+
 import random
 import sys
 import math
@@ -115,14 +115,11 @@ fscore = {}
 tree = {}
 foundblocks = set()
 total_path = []
-
 mx = 101
 my = 101
 maze = Maze(mx,my)
-mode = ""
-maxgscore = mx*my-1
-if len(sys.argv) > 1:
-	mode = sys.argv[1]
+maxgscore = mx * my - 1
+
 def RFAS():
 	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks
 
@@ -136,12 +133,7 @@ def RFAS():
 		openSet._dict = {}
 		tree = {}
 		closedSet = set()
-		if not mode:
-			openSet.put(maze.start,fscore[maze.start])
-		if mode == "highg":
-			openSet.put(maze.start,maxgscore*fscore[maze.start] - gscore[maze.start])
-		if mode == "lowg":
-			openSet.put(maze.start,maxgscore*fscore[maze.start] + gscore[maze.start])
+		openSet.put(maze.start,fscore[maze.start]*maxgscore - gscore[maze.start])
 		#updates observed blockings 
 		for i in range(4):
 			next = (maze.start[0] + dx[i], maze.start[1] + dy[i])
@@ -150,17 +142,11 @@ def RFAS():
 					if(maze.maze[next[0]][next[1]] == 0):
 						foundblocks.add(next)
 		if(len(total_path) == 0):
-			start = time.time()
 			computePath(maze.start,maze.goal)
-			end = time.time()
-			print('astar calculation took: ' + str(end-start))
 		else:
 			for points in total_path:
 				if points in foundblocks:
-					start = time.time()
 					computePath(maze.start,maze.goal)
-					end = time.time()
-					print('astar calculation took: ' + str(end-start))
 					return 0
 			if(pointEquals(maze.start,total_path[0])):
 				total_path.pop(0)
@@ -177,7 +163,6 @@ def computePath(start, goal):
 		tempg = {}
 		tempf = {}
 		current = openSet.get()
-		#print (current)
 		if pointEquals(current, maze.goal):
 			return construct_path(current)
 		closedSet.add(current)
@@ -196,12 +181,7 @@ def computePath(start, goal):
 				gscore[succ] = gscore[current] + 1
 				fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 				tree[succ] = current
-				if not mode:
-					openSet.put(succ, fscore[succ])
-				if mode == "highg":
-					openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
-				if mode == "lowg":
-					openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
+				openSet.put(succ, fscore[succ]*maxgscore-gscore[succ])	
 			else:
 				tentativeg = gscore[current] + 1
 				if tentativeg >= gscore[succ]:
@@ -211,13 +191,8 @@ def computePath(start, goal):
 					gscore[succ] = gscore[current] + 1
 					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 					openSet.remove(succ)
-					if not mode:
-						openSet.put(succ, fscore[succ])
-					if mode == "highg":
-						openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
-					if mode == "lowg":
-						openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
-						
+					oepnSet.put(succ, fscore[succ]*maxgscore-gscore[succ])
+					
 def construct_path(current):
 	global maze, total_path
 	total_path = [current]
@@ -229,6 +204,8 @@ def construct_path(current):
 				
 
 	
+
+
 
 
 
@@ -372,24 +349,6 @@ while not done:
 				#	print (x[0], x[1])
 			if event.key == pygame.K_TAB:
 				view = not view
-		elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-			column = pos[0] // (WIDTH + MARGIN)
-			row = pos[1] // (HEIGHT + MARGIN)
-			maze.start = (row,column)
-# Debug prints
-			print("Start ", pos, "Grid coordinates: ", row, column)
-		elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-			column = pos[0] // (WIDTH + MARGIN)
-			row = pos[1] // (HEIGHT + MARGIN)
-			maze.goal = (row,column)
-			# Debug prints
-			print("Goal ", pos, "Grid coordinates: ", row, column)
-           	
-
-    # --- Game logic should go here
-	pos = pygame.mouse.get_pos()
-	x = pos[0]
-	y = pos[1]
 
 	# Set the screen background
 	screen.fill(BLACK)
