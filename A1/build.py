@@ -5,10 +5,10 @@ import math
 #sets the ratio for number of blocked blocks in the maze
 unblockedBias = 70
 blockedBias = 100 - unblockedBias
-weight_list = [0] * unblockedBias +  [1] * blockedBias
+weight_list = [1] * unblockedBias +  [0] * blockedBias
 
 #of rows and columns
-x_size = 101 
+x_size = 101
 y_size = 101
 
 directory = "tests/"
@@ -29,7 +29,7 @@ def create_testcase(version):
 		for x in range(x_size):
 			val = random.choice(weight_list)
 			f.write( str(val) + ', ')
-		
+
 		f.write('\n')
 
 	f.close()
