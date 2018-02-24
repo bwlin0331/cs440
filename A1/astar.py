@@ -134,7 +134,7 @@ while not done:
                 print("STEPS: ",steps)
 
                 # A* loop
-                if openSet and  not found:
+                while openSet and  not found:
 
                     #find the minimum fScore in openSet
                     current = min(openSet, key=lambda x: fScore[x[0]][x[1]])
@@ -173,7 +173,7 @@ while not done:
 
                         #Record Path
                         cameFrom[neighbor[0]][neighbor[1]] = current
-                elif  found and start not in finished_path:
+                if  found and start not in finished_path:
                     print("Position: ", current)
                     finished_path.append(current)
                     current = cameFrom[current[0]][current[1]]
