@@ -116,7 +116,6 @@ hscore = {}
 tree = {}
 foundblocks = set()
 total_path = []
-
 mx = 101
 my = 101
 maze = Maze(mx,my)
@@ -130,6 +129,7 @@ def RFAS():
 	if(not pointEquals(maze.start,maze.goal)):
 		gscore = {}
 		fscore = {}
+		expandednodes = []
 		if mode == "back":
 			gscore = {maze.goal:0}
 			fscore = {maze.goal:heuristic_func(maze.start,maze.goal)}
@@ -250,7 +250,7 @@ def computePath(start, goal):
 						openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
 
 def construct_path(current):
-	global maze, total_path, hscore
+	global maze, total_path, hscore, closedSet
 	count = 0
 	total_path = [current]
 	while current in tree.keys():
@@ -261,7 +261,13 @@ def construct_path(current):
 			total_path.insert(0,current)
 			if mode == "adaptive":
 				hscore[current] = count
+				closedSet.remove(current)
 				count += 1
+	if mode == "adaptive":
+		for point in closedSet:
+			hscore[point] = count - gscore[point]
+
+
 
 
 
