@@ -5,9 +5,7 @@ import sys
 import math
 import pygame
 import heapq
-import csv
-import os
-from mazeBuild import test_to_array
+from build import test_to_array
 
 dx = [0, 1, 0, -1]; dy = [-1, 0, 1, 0]
 BLACK = (0, 0, 0)
@@ -114,10 +112,10 @@ def generateMaze(m):
 
 gscore = {}
 fscore = {}
-hscore = {}
 tree = {}
 foundblocks = set()
 total_path = []
+
 mx = 101
 my = 101
 maze = Maze(mx,my)
@@ -125,13 +123,12 @@ mode = ""
 maxgscore = mx*my-1
 if len(sys.argv) > 1:
 	mode = sys.argv[1]
-def RFAS(testNum, filename):
-	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
+def RFAS():
+	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks
 
 	if(not pointEquals(maze.start,maze.goal)):
 		gscore = {}
 		fscore = {}
-		expandednodes = []
 		if mode == "back":
 			gscore = {maze.goal:0}
 			fscore = {maze.goal:heuristic_func(maze.start,maze.goal)}
@@ -139,10 +136,7 @@ def RFAS(testNum, filename):
 
 		else:
 			gscore = {maze.start:0}
-			if mode == "adaptive" and maze.start in hscore:
-				fscore = {maze.start:hscore[maze.start]}
-			else:
-				fscore = {maze.start:heuristic_func(maze.start,maze.goal)}
+			fscore = {maze.start:heuristic_func(maze.start,maze.goal)}
 			gscore[maze.goal] = math.inf
 
 		openSet.elements = []
@@ -157,8 +151,6 @@ def RFAS(testNum, filename):
 			openSet.put(maze.start,maxgscore*fscore[maze.start] + gscore[maze.start])
 		if mode == "back":
 			openSet.put(maze.goal,fscore[maze.goal])
-		if mode == "adaptive":
-			openSet.put(maze.start,fscore[maze.start])
 		#updates observed blockings
 		for i in range(4):
 			next = (maze.start[0] + dx[i], maze.start[1] + dy[i])
@@ -172,11 +164,9 @@ def RFAS(testNum, filename):
 				computePath(maze.goal,maze.start)
 			else:
 				computePath(maze.start,maze.goal)
+
 			end = time.time()
 			print('astar calculation took: ' + str(end-start))
-			with open(filename, 'a') as csvfile:
-				writer = csv.writer(csvfile, delimiter=',')
-				writer.writerow(['n/a', '1', testNum, str(end-start)])
 		else:
 			for points in total_path:
 				if points in foundblocks:
@@ -187,9 +177,6 @@ def RFAS(testNum, filename):
 						computePath(maze.start,maze.goal)
 					end = time.time()
 					print('astar calculation took: ' + str(end-start))
-					with open(filename, 'a') as csvfile:
-						writer = csv.writer(csvfile, delimiter=',')
-						writer.writerow(['n/a', '1', testNum, str(end-start)])
 					return 0
 			if(pointEquals(maze.start,total_path[0])):
 				total_path.pop(0)
@@ -200,18 +187,56 @@ def RFAS(testNum, filename):
 	else:
 		print('I am at the target')
 
+
+def adpativeAStar(gscore=None, closedSet=None):
+	#perform a*star once normally
+	#if already in path
+	#g(s) = cost to current state
+	#goal(s) = distance from start state to Goal
+	#heurisitc = goal(s) - g(s)
+
+	#1 update action costs (g?)
+	#2 start state, runs forward a*
+	#3 g* - lowest cost, closedSet = passed to next iteration (all expanded states)
+	#4 h[s] = g* - g[s]: gvalue for current state
+	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks
+
+	#checking if start point is goal point
+	if not pointEquals(maze.start, maze.goal):
+		#no gscore value passed in
+		if gscore == None:
+			gscore = {maze.start:0}
+			gscore[maze.goal] = math.inf
+
+		fscore = {maze.start:heuristic_func(maze.start,maze.goal)}
+		openSet.elements = []
+		openSet._dict = {}
+		tree = {}
+		closedSet = set()
+
+		openSet.put(maze.start, fscore[maze.start])
+
+
+
+	else:
+		print("I am at the target")
+
+
+
+
 def computePath(start, goal):
-	global counter, maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
+	global counter, maze, openSet, closedSet, gscore, fscore, tree, foundblocks
 	while(not openSet.empty()):
 		tempg = {}
 		tempf = {}
 		current = openSet.get()
 		#print (current)
-
-		if pointEquals(current, goal):
-			return construct_path(current)
-
-
+		if mode == "back":
+			if pointEquals(current, maze.start):
+				return construct_path(current)
+		else:
+			if pointEquals(current, maze.goal):
+				return construct_path(current)
 
 		closedSet.add(current)
 		nlst = [] # list of available neighbors
@@ -227,12 +252,9 @@ def computePath(start, goal):
 
 			if not openSet.contains(succ):
 				gscore[succ] = gscore[current] + 1
-				if mode == "adaptive" and succ in hscore:
-					fscore[succ] = gscore[succ] + hscore[succ]
-				else:
-					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
+				fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 				tree[succ] = current
-				if not mode or mode == "back" or mode == "adaptive":
+				if not mode or mode == "back":
 					openSet.put(succ, fscore[succ])
 				if mode == "highg":
 					openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
@@ -245,10 +267,7 @@ def computePath(start, goal):
 				else:
 					tree[succ] = current
 					gscore[succ] = gscore[current] + 1
-					if mode == "adaptive" and succ in hscore:
-						fscore[succ] = gscore[succ] + hscore[succ]
-					else:
-						fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
+					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 					openSet.remove(succ)
 					if not mode or mode == "back":
 						openSet.put(succ, fscore[succ])
@@ -258,137 +277,121 @@ def computePath(start, goal):
 						openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
 
 def construct_path(current):
-	global maze, total_path, hscore, closedSet
-	count = 0
+	global maze, total_path
 	total_path = [current]
 	while current in tree.keys():
 		current = tree[current]
 		if mode == "back":
-			total_path.append(current)
+			total_path =  total_path + [current]
 		else:
-			total_path.insert(0,current)
-			if mode == "adaptive":
-				hscore[current] = count
-				closedSet.remove(current)
-				count += 1
-	if mode == "adaptive":
-		for point in closedSet:
-			hscore[point] = count - gscore[point]
+			total_path = [current] + total_path
 
 
-def main():
-	#pass in testcase number as string, returns 2d array
-	testNum = input("Please specify testcase to perform A* on (1-50): ")
-	maze.maze = test_to_array(testNum)
-
-	#omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
-	#print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
-	# maze.maze =
-	#print('\n')
-	#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
-	maze.start = randomPoint(mx,my)
-	maze.maze[maze.start[0]][maze.start[1]] = 1
 
 
-	maze.goal = randomPoint(mx,my)
-
-	filename = 'test' + testNum + '.csv'
-	#cleaning files for record keeping
-	try:
-	    os.remove(filename)
-	except OSError:
-	    pass
-
-	while(pointEquals(maze.start,maze.goal)):
-			maze.goal = randomPoint(mx,my)
-	maze.maze[maze.goal[0]][maze.goal[1]] = 1
-
-	pygame.init()
-	size =((WIDTH+MARGIN)*maze.y,(WIDTH+HEIGHT)*maze.x)
-	sq_size = 64
-	screen = pygame.display.set_mode(size)
-	pygame.display.set_caption("A*")
-	done = False
-	view = True
-	clock = pygame.time.Clock()
-	#Main program loop
-	while not done:
-		for event in pygame.event.get():  # User did something
-			if event.type == pygame.QUIT:  # If user clicked close
-				done = True  # Flag that we are done so we exit this loop
-				#elif event.type == pygame.MOUSEBUTTONDOWN:
-			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
-					done = True
-				if event.key == pygame.K_SPACE:
-					RFAS(testNum, filename)
-					#for x in total_path:
-					#	print (x[0], x[1])
-				if event.key == pygame.K_TAB:
-					view = not view
-			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-				column = pos[0] // (WIDTH + MARGIN)
-				row = pos[1] // (HEIGHT + MARGIN)
-				maze.start = (row,column)
-	# Debug prints
-				print("Start ", pos, "Grid coordinates: ", row, column)
-			elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-				column = pos[0] // (WIDTH + MARGIN)
-				row = pos[1] // (HEIGHT + MARGIN)
-				maze.goal = (row,column)
-				# Debug prints
-				print("Goal ", pos, "Grid coordinates: ", row, column)
 
 
-	    # --- Game logic should go here
-		pos = pygame.mouse.get_pos()
-		x = pos[0]
-		y = pos[1]
 
-		# Set the screen background
-		screen.fill(BLACK)
-		if view:
-			for row in range(maze.x):
-				for column in range(maze.y):
-					color = BLACK
-					if maze.maze[row][column] == 1:
-						color = WHITE
-					if maze.start[0] == row and maze.start[1] == column:
-						color = GREEN
-					if maze.goal[0] == row and maze.goal[1] == column:
-						color = RED
-					pygame.draw.rect(screen,color,
-					[(MARGIN + WIDTH) * column + MARGIN,
-					(MARGIN + HEIGHT) * row + MARGIN,
-					WIDTH,
-					HEIGHT])
-		else:
-			for row in range(maze.x):
-				for column in range(maze.y):
+
+#pass in testcase number as string, returns 2d array
+maze.maze = test_to_array("1")
+
+#omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
+#print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
+# maze.maze =
+#print('\n')
+#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
+maze.start = randomPoint(mx,my)
+maze.maze[maze.start[0]][maze.start[1]] = 1
+
+
+maze.goal = randomPoint(mx,my)
+while(pointEquals(maze.start,maze.goal)):
+		maze.goal = randomPoint(mx,my)
+maze.maze[maze.goal[0]][maze.goal[1]] = 1
+
+pygame.init()
+size =((WIDTH+MARGIN)*maze.y,(WIDTH+HEIGHT)*maze.x)
+sq_size = 64
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("A*")
+done = False
+view = True
+clock = pygame.time.Clock()
+#Main program loop
+while not done:
+	for event in pygame.event.get():  # User did something
+		if event.type == pygame.QUIT:  # If user clicked close
+			done = True  # Flag that we are done so we exit this loop
+			#elif event.type == pygame.MOUSEBUTTONDOWN:
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+				done = True
+			if event.key == pygame.K_SPACE:
+				RFAS()
+				#for x in total_path:
+				#	print (x[0], x[1])
+			if event.key == pygame.K_TAB:
+				view = not view
+		elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+			column = pos[0] // (WIDTH + MARGIN)
+			row = pos[1] // (HEIGHT + MARGIN)
+			maze.start = (row,column)
+# Debug prints
+			print("Start ", pos, "Grid coordinates: ", row, column)
+		elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+			column = pos[0] // (WIDTH + MARGIN)
+			row = pos[1] // (HEIGHT + MARGIN)
+			maze.goal = (row,column)
+			# Debug prints
+			print("Goal ", pos, "Grid coordinates: ", row, column)
+
+
+    # --- Game logic should go here
+	pos = pygame.mouse.get_pos()
+	x = pos[0]
+	y = pos[1]
+
+	# Set the screen background
+	screen.fill(BLACK)
+	if view:
+		for row in range(maze.x):
+			for column in range(maze.y):
+				color = BLACK
+				if maze.maze[row][column] == 1:
 					color = WHITE
-					if (row,column) in foundblocks:
-						color = BLACK
-					if maze.start[0] == row and maze.start[1] == column:
-						color = GREEN
-					if maze.goal[0] == row and maze.goal[1] == column:
-						color = RED
-					pygame.draw.rect(screen,color,
-					[(MARGIN + WIDTH) * column + MARGIN,
-					(MARGIN + HEIGHT) * row + MARGIN,
-					WIDTH,
-					HEIGHT])
-		for points in total_path:
-			pygame.draw.circle(screen,GOLD,
-				((MARGIN + WIDTH) * points[1] + MARGIN + 4,
-				(MARGIN + HEIGHT) * points[0] + MARGIN + 4),
-				3,
-				3)
-		# Limit to 60 frames per second
-		clock.tick(2)
-		pygame.display.flip()
+				if maze.start[0] == row and maze.start[1] == column:
+					color = GREEN
+				if maze.goal[0] == row and maze.goal[1] == column:
+					color = RED
+				pygame.draw.rect(screen,color,
+				[(MARGIN + WIDTH) * column + MARGIN,
+				(MARGIN + HEIGHT) * row + MARGIN,
+				WIDTH,
+				HEIGHT])
+	else:
+		for row in range(maze.x):
+			for column in range(maze.y):
+				color = WHITE
+				if (row,column) in foundblocks:
+					color = BLACK
+				if maze.start[0] == row and maze.start[1] == column:
+					color = GREEN
+				if maze.goal[0] == row and maze.goal[1] == column:
+					color = RED
+				pygame.draw.rect(screen,color,
+				[(MARGIN + WIDTH) * column + MARGIN,
+				(MARGIN + HEIGHT) * row + MARGIN,
+				WIDTH,
+				HEIGHT])
+	for points in total_path:
+		pygame.draw.circle(screen,GOLD,
+			((MARGIN + WIDTH) * points[1] + MARGIN + 4,
+			(MARGIN + HEIGHT) * points[0] + MARGIN + 4),
+			3,
+			3)
+	# Limit to 60 frames per second
+	clock.tick(2)
+	pygame.display.flip()
 
-	pygame.quit()
-
-
-if __name__ == "__main__":
-	main()
+pygame.quit()

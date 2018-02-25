@@ -1,48 +1,68 @@
-# http://en.wikipedia.org/wiki/Maze_generation_algorithm
-# Random Maze Generator using Depth-first Search
-# FB - 20121214
 import random
-from PIL import Image
-imgx = 500; imgy = 500
-image = Image.new("RGB", (imgx, imgy))
-pixels = image.load()
+import sys
+import math
 
-mx = 5; my = 5 # width and height of the maze
+#sets the ratio for number of blocked blocks in the maze
+unblockedBias = 70
+blockedBias = 100 - unblockedBias
+weight_list = [1] * unblockedBias +  [0] * blockedBias
 
-maze = [[0 for x in range(mx)] for y in range(my)]
-dx = [0, 1, 0, -1]; dy = [-1, 0, 1, 0] # 4 directions to move in the maze
-color = [(0,0, 0), (255, 255, 255)] # RGB colors of the maze
-# start the maze from a random cell
-stack = [(random.randint(0, mx - 1), random.randint(0, my - 1))]
+#of rows and columns
+x_size = 101
+y_size = 101
 
-while len(stack) > 0:
-    (cx, cy) = stack[-1]
-    maze[cy][cx] = 1
-    # find a new cell to add
-    nlst = [] # list of available neighbors
-    for i in range(4):
-        nx = cx + dx[i]; ny = cy + dy[i]
-        if nx >= 0 and nx < mx and ny >= 0 and ny < my:
-            if maze[ny][nx] == 0:
-                # of occupied neighbors must be 1
-                ctr = 0
-                for j in range(4):
-                    ex = nx + dx[j]; ey = ny + dy[j]
-                    if ex >= 0 and ex < mx and ey >= 0 and ey < my:
-                        if maze[ey][ex] == 1: ctr += 1
-                if ctr == 1: nlst.append(i)
-    # if 1 or more neighbors available then randomly select one and move
-    if len(nlst) > 0:
-        ir = nlst[random.randint(0, len(nlst) - 1)]
-        cx += dx[ir]; cy += dy[ir]
-        stack.append((cx, cy))
-    else: stack.pop()
+directory = "testcases/"
+file_head = "testcase"
 
 
-print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze]))
-# paint the maze
-for ky in range(imgy):
-    for kx in range(imgx):
-        pixels[kx, ky] = color[maze[my * ky / imgy][mx * kx / imgx]]
+def create_testcase(version):
+	try:
+		filename = directory + file_head + str(version) + ".txt"
+		f = open(filename, 'w')
+	except FileNotFoundError:
+		print ("Could not find the directory or file: " + filename)
+		return
 
-image.save("Maze_" + str(mx) + "x" + str(my) + ".png", "PNG")
+	#writes values per column
+	for y in range(y_size):
+		#writes values per row
+		for x in range(x_size):
+			val = random.choice(weight_list)
+			f.write( str(val) + ', ')
+
+		f.write('\n')
+
+	f.close()
+
+def test_to_array(version):
+	try:
+		filename = directory + file_head + version + ".txt"
+		f = open(filename)
+	except FileNotFoundError:
+		print ("Could not find the file to open: " + filename)
+		return
+
+	#final 2d array
+	maze = []
+	#for each line in test case
+	for line in f:
+		temp = line.split(', ')
+		temp = temp[:-1]
+		temp = [int(i) for i in temp]
+		maze.append(temp)
+
+	return maze
+
+def main():
+	# writing test cases - stored in directory labeled above
+	for i in range(50):
+		version = i+1
+		create_testcase(version)
+
+	# test_num = input("which test case number (1-50) would you like to run?  ")
+	# print(test_to_array(test_num))
+	tasks = None
+
+
+if __name__ == "__main__":
+	main()
