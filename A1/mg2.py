@@ -259,7 +259,6 @@ def computePath(start, goal):
 
 def construct_path(current):
 	global maze, total_path, hscore, closedSet
-	count = 0
 	total_path = [current]
 	while current in tree.keys():
 		current = tree[current]
@@ -267,13 +266,9 @@ def construct_path(current):
 			total_path.append(current)
 		else:
 			total_path.insert(0,current)
-			if mode == "adaptive":
-				hscore[current] = count
-				closedSet.remove(current)
-				count += 1
 	if mode == "adaptive":
 		for point in closedSet:
-			hscore[point] = count - gscore[point]
+			hscore[point] = gscore[maze.goal] - gscore[point]
 
 
 def main():
