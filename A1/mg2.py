@@ -7,7 +7,7 @@ import pygame
 import heapq
 import csv
 import os
-from mazeBuild import test_to_array
+from mazeBuild import *
 
 dx = [0, 1, 0, -1]; dy = [-1, 0, 1, 0]
 BLACK = (0, 0, 0)
@@ -125,9 +125,13 @@ mode = ""
 maxgscore = mx*my-1
 if len(sys.argv) > 1:
 	mode = sys.argv[1]
-def RFAS(testNum, filename):
+
+def RFAS(testNum, filename, count, dataType=None):
 	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
 
+	# if dataType != None:
+	# 	mode = dataType
+	#
 	if(not pointEquals(maze.start,maze.goal)):
 		gscore = {}
 		fscore = {}
@@ -176,7 +180,7 @@ def RFAS(testNum, filename):
 			print('astar calculation took: ' + str(end-start))
 			with open(filename, 'a') as csvfile:
 				writer = csv.writer(csvfile, delimiter=',')
-				writer.writerow(['n/a', '1', testNum, str(end-start)])
+				writer.writerow([count, testNum, str(end-start)])
 		else:
 			for points in total_path:
 				if points in foundblocks:
@@ -189,16 +193,23 @@ def RFAS(testNum, filename):
 					print('astar calculation took: ' + str(end-start))
 					with open(filename, 'a') as csvfile:
 						writer = csv.writer(csvfile, delimiter=',')
-						writer.writerow(['n/a', '1', testNum, str(end-start)])
-					return 0
+						writer.writerow([count, testNum, str(end-start)])
 			if(pointEquals(maze.start,total_path[0])):
 				total_path.pop(0)
 			maze.start = total_path.pop(0)
 
 		if openSet.empty():
 			print ("I cannot reach the target")
+			with open(filename, 'a') as csvfile:
+				writer = csv.writer(csvfile, delimiter=',')
+				writer.writerow(["FAIL", "FAIL", "FAIL"])
+			return -1
 	else:
 		print('I am at the target')
+		with open(filename, 'a') as csvfile:
+			writer = csv.writer(csvfile, delimiter=',')
+			writer.writerow(["DONE","DONE","DONE"])
+		return 1
 
 def computePath(start, goal):
 	global counter, maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
@@ -281,13 +292,18 @@ def main():
 	# maze.maze =
 	#print('\n')
 	#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
-	maze.start = randomPoint(mx,my)
+	maze.start = startPoint(testNum)
 	maze.maze[maze.start[0]][maze.start[1]] = 1
 
 
-	maze.goal = randomPoint(mx,my)
+	maze.goal = goalPoint(testNum)
 
-	filename = 'test' + testNum + '.csv'
+	if len(sys.argv) > 1:
+		dataType = sys.argv[1]
+	else:
+		dataType = 'normal'
+
+	filename = 'data/' + dataType + '/test' + testNum + '.csv'
 	#cleaning files for record keeping
 	try:
 	    os.remove(filename)
@@ -306,6 +322,7 @@ def main():
 	done = False
 	view = True
 	clock = pygame.time.Clock()
+	count = 1
 	#Main program loop
 	while not done:
 		for event in pygame.event.get():  # User did something
@@ -316,7 +333,8 @@ def main():
 				if event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
 					done = True
 				if event.key == pygame.K_SPACE:
-					RFAS(testNum, filename)
+					RFAS(testNum, filename, count)
+					count += 1
 					#for x in total_path:
 					#	print (x[0], x[1])
 				if event.key == pygame.K_TAB:
@@ -384,6 +402,54 @@ def main():
 
 	pygame.quit()
 
+def test(testNum='-1', mode=""):
+	#pass in testcase number as string, returns 2d array
+	if testNum == -1:
+		testNum = input("Please specify testcase to perform A* on (1-50): ")
+		
+	maze.maze = test_to_array(testNum)
+
+	#omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
+	#print('\n'.join([''.join(['{:4}'.format(item) for item in row]) for row in maze.maze]))
+	# maze.maze =
+	#print('\n')
+	#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
+	maze.start = startPoint(testNum)
+	maze.maze[maze.start[0]][maze.start[1]] = 1
+
+
+	maze.goal = goalPoint(testNum)
+	count = 1
+	# if len(sys.argv) > 1:
+	# 	dataType = sys.argv[1]
+	# else:
+	# 	dataType = 'normal'
+	if mode == "":
+		dataType = 'normal'
+
+	dataType = mode
+
+	filename = 'data/' + dataType + '/test' + testNum + '.csv'
+	#cleaning files for record keeping
+	try:
+	    os.remove(filename)
+	except OSError:
+	    pass
+
+	while(pointEquals(maze.start,maze.goal)):
+			maze.goal = randomPoint(mx,my)
+	maze.maze[maze.goal[0]][maze.goal[1]] = 1
+
+	status = 0
+	while status != -1 and status != 1:
+		status = RFAS(testNum, filename, count, mode)
+		count += 1
+
+	if status == 1:
+		print ("Goal found")
+	else:
+		print ("goal not reached")
 
 if __name__ == "__main__":
-	main()
+	# main()
+	test()
