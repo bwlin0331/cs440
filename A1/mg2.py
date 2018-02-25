@@ -406,7 +406,7 @@ def test(testNum='-1', mode=""):
 	#pass in testcase number as string, returns 2d array
 	if testNum == -1:
 		testNum = input("Please specify testcase to perform A* on (1-50): ")
-		
+
 	maze.maze = test_to_array(testNum)
 
 	#omaze = [[1 for i in range(maze.x)] for j in range(maze.y)]
@@ -426,8 +426,8 @@ def test(testNum='-1', mode=""):
 	# 	dataType = 'normal'
 	if mode == "":
 		dataType = 'normal'
-
-	dataType = mode
+	else:
+		dataType = mode
 
 	filename = 'data/' + dataType + '/test' + testNum + '.csv'
 	#cleaning files for record keeping
