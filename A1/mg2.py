@@ -265,7 +265,7 @@ def computePath(start, goal):
 					else:
 						fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 					openSet.remove(succ)
-					if not mode or mode == "back":
+					if not mode or mode == "back" or mode == "adaptive":
 						openSet.put(succ, fscore[succ])
 					if mode == "highg":
 						openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
