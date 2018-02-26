@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 FEB 2018 12:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 FEB 2018 14:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -619,101 +619,109 @@ Package pdftex.def Info: RutgersLogo.png used on input line 39.
  [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./Rutge
-rsLogo.png>] [1] <Figure8.png, id=18, 240.9pt x 188.705pt>
+rsLogo.png>] <Figure8.png, id=15, 240.9pt x 188.705pt>
 File: Figure8.png Graphic file (type png)
  <use Figure8.png>
-Package pdftex.def Info: Figure8.png used on input line 60.
+Package pdftex.def Info: Figure8.png used on input line 59.
 (pdftex.def)             Requested size: 234.8775pt x 183.99382pt.
 
-Overfull \hbox (5.0pt too wide) in paragraph at lines 60--61
+Overfull \hbox (5.0pt too wide) in paragraph at lines 59--60
  [][] 
  []
 
-<rfas_high_low.png, id=20, 363.2772pt x 317.988pt>
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 71.
+(/usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 71.
+ [1
+
+ <./Figure8.png>] <rfas_high_low.png, id=22, 363.2772pt x 317.988pt>
 File: rfas_high_low.png Graphic file (type png)
  <use rfas_high_low.png>
-Package pdftex.def Info: rfas_high_low.png used on input line 73.
+Package pdftex.def Info: rfas_high_low.png used on input line 105.
 (pdftex.def)             Requested size: 234.8775pt x 205.59802pt.
 
-Overfull \hbox (5.0pt too wide) in paragraph at lines 73--74
+Overfull \hbox (5.0pt too wide) in paragraph at lines 105--106
  [][] 
  []
 
-<low_high.png, id=21, 362.7954pt x 315.579pt>
+<low_high.png, id=23, 362.7954pt x 315.579pt>
 File: low_high.png Graphic file (type png)
  <use low_high.png>
-Package pdftex.def Info: low_high.png used on input line 79.
-(pdftex.def)             Requested size: 234.8775pt x 204.31493pt.
-
-Overfull \hbox (5.0pt too wide) in paragraph at lines 79--80
- [][] 
- []
-
-
-Overfull \hbox (5.49509pt too wide) in paragraph at lines 76--83
-\OT1/cmr/m/n/12 us-ing 3 dif-fer-ent Re-peated For-ward A* (RFAS)
- []
-
-
-Overfull \hbox (14.31451pt too wide) in paragraph at lines 76--83
-\OT1/cmr/m/n/12 RFAS im-ple-mented with some form of tiebreaker
- []
-
-
-Overfull \hbox (12.62692pt too wide) in paragraph at lines 76--83
-\OT1/cmr/m/n/12 com-pu-ta-tional time dif-fer-ence be-tween tiebreak-
- []
-
-
-Overfull \hbox (3.15758pt too wide) in paragraph at lines 76--83
-\OT1/cmr/m/n/12 How-ever, there is an over-all trend of the higher
- []
-
-
-Overfull \hbox (1.92148pt too wide) in paragraph at lines 76--83
-\OT1/cmr/m/n/12 g-score value ac-tu-ally out-per-form-ing the lower
- []
-
-[2
-
- <./Figure8.png> <./rfas_high_low.png>]
-<foward_backward.png, id=27, 363.2772pt x 316.5426pt>
-File: foward_backward.png Graphic file (type png)
-
-<use foward_backward.png>
-Package pdftex.def Info: foward_backward.png used on input line 86.
-(pdftex.def)             Requested size: 234.8775pt x 204.66348pt.
-
-Overfull \hbox (5.0pt too wide) in paragraph at lines 86--87
- [][] 
- []
-
-
-Overfull \hbox (5.18533pt too wide) in paragraph at lines 89--90
-\OT1/cmr/m/n/12 in-di-cates that again, com-pu-ta-tional times were
- []
-
-[3 <./low_high.png> <./foward_backward.png>]
-<test26.png, id=33, 880.28876pt x 513.92pt>
-File: test26.png Graphic file (type png)
- <use test26.png>
-Package pdftex.def Info: test26.png used on input line 93.
-(pdftex.def)             Requested size: 469.75502pt x 274.24263pt.
- [4
-
- <./test26.png>] <test10.png, id=38, 309.155pt x 746.79pt>
-File: test10.png Graphic file (type png)
- <use test10.png>
-Package pdftex.def Info: test10.png used on input line 102.
-(pdftex.def)             Requested size: 187.89914pt x 453.90033pt.
-
-<foward_adaptive.png, id=39, 362.7954pt x 315.579pt>
-File: foward_adaptive.png Graphic file (type png)
- <use foward_adaptive.png>
-Package pdftex.def Info: foward_adaptive.png used on input line 111.
+Package pdftex.def Info: low_high.png used on input line 111.
 (pdftex.def)             Requested size: 234.8775pt x 204.31493pt.
 
 Overfull \hbox (5.0pt too wide) in paragraph at lines 111--112
+ [][] 
+ []
+
+
+Overfull \hbox (7.8617pt too wide) in paragraph at lines 108--115
+\OT1/cmr/m/n/12 with a higher g-score would have a lower heuris-
+ []
+
+[2 <./rfas_high_low.png> <./low_high.png>]
+<foward_backward.png, id=29, 363.2772pt x 316.5426pt>
+File: foward_backward.png Graphic file (type png)
+
+<use foward_backward.png>
+Package pdftex.def Info: foward_backward.png used on input line 118.
+(pdftex.def)             Requested size: 234.8775pt x 204.66348pt.
+
+Overfull \hbox (5.0pt too wide) in paragraph at lines 118--119
+ [][] 
+ []
+
+
+Overfull \hbox (11.38666pt too wide) in paragraph at lines 121--122
+\OT1/cmr/m/n/12 above in-di-cates that again, com-pu-ta-tional times
+ []
+
+[3
+
+ <./foward_backward.png>] <test26.png, id=34, 880.28876pt x 513.92pt>
+File: test26.png Graphic file (type png)
+
+<use test26.png>
+Package pdftex.def Info: test26.png used on input line 125.
+(pdftex.def)             Requested size: 469.75502pt x 274.24263pt.
+ [4
+
+ <./test26.png>] <test10.png, id=39, 309.155pt x 746.79pt>
+File: test10.png Graphic file (type png)
+
+<use test10.png>
+Package pdftex.def Info: test10.png used on input line 134.
+(pdftex.def)             Requested size: 187.89914pt x 453.90033pt.
+
+Overfull \hbox (7.40475pt too wide) in paragraph at lines 140--143
+\OT1/cmr/m/n/12 words, the tri-an-gle in-equal-ity must hold, mean-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--143
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--143
+
+ []
+
+
+Overfull \hbox (2.58768pt too wide) in paragraph at lines 140--143
+\OT1/cmr/m/n/12 the Man-hat-tan dis-tance rep-re-sents. The Man-
+ []
+
+<foward_adaptive.png, id=40, 362.7954pt x 315.579pt>
+File: foward_adaptive.png Graphic file (type png)
+ <use foward_adaptive.png>
+Package pdftex.def Info: foward_adaptive.png used on input line 149.
+(pdftex.def)             Requested size: 234.8775pt x 204.31493pt.
+
+Overfull \hbox (5.0pt too wide) in paragraph at lines 149--150
  [][] 
  []
 
@@ -725,22 +733,24 @@ Overfull \hbox (5.0pt too wide) in paragraph at lines 111--112
 
 ] [8] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 13741 strings out of 492995
- 269102 string characters out of 6132704
+ 13759 strings out of 492995
+ 269419 string characters out of 6132704
  348200 words of memory out of 5000000
- 17004 multiletter control sequences out of 15000+600000
- 10117 words of font info for 36 fonts, out of 8000000 for 9000
+ 17019 multiletter control sequences out of 15000+600000
+ 10464 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,8n,68p,1185b,284s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmti12.pfb>
-Output written on Report.pdf (9 pages, 540801 bytes).
+fonts/cm/cmmi12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmti12.pfb>
+Output written on Report.pdf (9 pages, 566181 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
- 38 compressed objects within 1 object stream
+ 78 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 

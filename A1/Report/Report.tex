@@ -32,7 +32,7 @@
 		\begin{minipage}{0.4\textwidth}
 			\begin{flushright} \large
 				\emph{Supervisor:} \\
-				Dr.Abdeslam  \textsc{Boularias} % Supervisor's Name
+				Dr. Abdeslam  \textsc{Boularias} % Supervisor's Name
 			\end{flushright}
 		\end{minipage}\\[2cm]
 
@@ -44,14 +44,13 @@
 		
 	\end{titlepage}
 	
-	%\twocolumn
+	\twocolumn
 	
 	\section*{Introduction}
 	
 	Your introduction goes here! Some examples of commonly used commands and features are listed below, to help you get started.
 	
 	If you have a question, please use the support box in the bottom right of the screen to get in touch. 
-	\twocolumn
 	\section*{Part 1 - Understanding the Methods}
 	
 	\subsection*{A) - East vs North}
@@ -66,6 +65,39 @@
 	the cell to the east, will it observe the blocked cells that do not allow it to use that path and force the agent to find a new path to the target.
 	
 	\subsection*{B) - Proving Completeness}
+	
+		Proving the completeness of an A* search algorithm can be observed by first simplifying the search algorithm.  Let the following variables be defined as: 
+		\begin{itemize}
+			\item g is a graph
+			\item S is the start vertex
+			\item G is the goal vertex
+			\item Q is a list of partial paths in g
+		\end{itemize}
+		Given the above variables, a modified version of the search algorithm's pseudo code can be found below.
+		\begin{enumerate}
+			\item Initialize Q with path(s)\\
+			set Visited = ()
+			\item If Q is empty, return fail\\
+			Else pick some partial path N from Q
+			\item \textit{// If head(N) = G, return N \\ (This is where the algorithm would normally exit)}
+			\item Else
+			\begin{enumerate}
+				\item Remove N from Q
+				\item Find neighbors of head(N) not in visited\\
+				Create one-step extension of partial paths from N to child
+				\item Add to Q all new paths
+				\item Add children of head(N) to visited
+				\item Go to step 2
+			\end{enumerate}
+		\end{enumerate}
+	
+		From the pseudo code, the following true statements can be observed:
+		\begin{itemize}
+			\item A path removed from Q is not placed back into Q.
+			\item If a vertex v is reachable from S, it will be placed into the visited set in a finite number of steps.
+			\item The modified pseudo code will place G into visited if it is reachable.
+		\end{itemize}
+		During the unmodified search algorithm, the two termination conditions are if there are no more vertices to be visited, or if the goal vertex G is found.  Therefore, the search algorithm is guaranteed to find a solution if one exists.  
 	
 	\section*{Part 2 - The Effects of Ties}
 		\begin{figure}[!htb]
@@ -105,7 +137,11 @@
 	
 	\section*{Part 4 - Proving Heuristics in the Adaptive A*}
 	
-		A consistent heuristic function is one where the estimate of a cell will always be less than or equal to the sum of the cost to reach a neighboring cell and the estimated distance from the neighboring cell to the goal.
+		A consistent heuristic function is one where the estimate of a cell will always be less than or equal to the sum of the cost to reach a neighboring cell and the estimated distance from the neighboring cell to the goal.  In other words, the triangle inequality must hold, meaning that the heuristic function must underestimate the actual path cost to the goal.\\
+		\\$h(cell)$ $\leq$ $step(neighbor)$ $+$ $h(neighbor)$\\ \\
+		This can be proven by understanding what the Manhattan distance represents.  The Manhattan distance is the shortest path to the goal because it is a straight line distance calculation from the given cell to the goal cell.  Any step that is taken will force the path length to increase because it will be deviating from the straight line.  
+
+		
 		
 	\section*{Part 5 - Heuristics in the Adaptive A*}
 		\begin{figure}[!htb]
@@ -237,4 +273,5 @@
 		\end{itemize}
 	\fi
 	
+
 \end{document}
