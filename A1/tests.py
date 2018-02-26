@@ -1,20 +1,30 @@
 import csv
 import os
+import math
+import time
 from mg2 import *
 
 def main():
     #running aStar tests on all 50 testcases
-    for i in range(50):
+    # for i in range(50):
         #normal
-        test(str(i+1))
+        # test(str(i+1))
+        # time.sleep(1)
         #highg
-        test(str(i+1), "highg")
+        # print(test(str(i+1), "highg"))
+        # time.sleep(5)
         #lowg
-        test(str(i+1), "lowg")
+        # test(str(i+1), "lowg")
+        # time.sleep(1)
         #back
-        test(str(i+1), "back")
+        # test(str(i+1), "back")
+        # time.sleep(1)
         #adaptive
-        test(str(i+1), "adaptive")
+        # test(str(i+1), "adaptive")
+        # time.sleep(1)
+    # while True:
+    testNum = input("Please specify testcase to perform A* on (1-50): ")
+    print(test(str(testNum)),"highg")
 
 def combine():
     dataType = "normal"
@@ -34,7 +44,10 @@ def combine():
         with open('data/' + dataType + '/test' + testNum + '.csv') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == "DONE" or row[0] == "FAIL":
+                if row[0] == "DONE":
+                    break
+                elif row[0] == "FAIL":
+                    # normTime = math.inf
                     break
                 else:
                     normTime += float(row[2])
@@ -43,7 +56,10 @@ def combine():
         with open('data/' + dataType + '/test' + testNum + '.csv') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == "DONE" or row[0] == "FAIL":
+                if row[0] == "DONE":
+                    break
+                elif row[0] == "FAIL":
+                    # highgTime = math.inf
                     break
                 else:
                     highgTime += float(row[2])
@@ -52,7 +68,10 @@ def combine():
         with open('data/' + dataType + '/test' + testNum + '.csv') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == "DONE" or row[0] == "FAIL":
+                if row[0] == "DONE":
+                    break
+                elif row[0] =="FAIL":
+                    # lowgTime = math.inf
                     break
                 else:
                     lowgTime += float(row[2])
@@ -61,7 +80,10 @@ def combine():
         with open('data/' + dataType + '/test' + testNum + '.csv') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == "DONE" or row[0] == "FAIL":
+                if row[0] == "DONE":
+                    break
+                elif row[0] == "FAIL":
+                    # backTime = math.inf
                     break
                 else:
                     backTime += float(row[2])
@@ -70,7 +92,10 @@ def combine():
         with open('data/' + dataType + '/test' + testNum + '.csv') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == "DONE" or row[0] == "FAIL":
+                if row[0] == "DONE":
+                    break
+                elif row[0] == "FAIL":
+                    # adaptiveTime = math.inf
                     break
                 else:
                     adaptiveTime += float(row[2])
@@ -81,6 +106,12 @@ def combine():
         #initial write to file
         filename = "data.csv"
 
+        sigFig = 5
+        normTime = round(normTime, sigFig)
+        highgTime = round(highgTime, sigFig)
+        lowgTime = round(lowgTime, sigFig)
+        backTime = round(backTime, sigFig)
+        adaptiveTime = round(adaptiveTime, sigFig)
         if i == 0:
         	#cleaning files for record keeping
             try:
@@ -102,3 +133,4 @@ def combine():
 if __name__ == "__main__":
     main()
     combine()
+    print ("All done")

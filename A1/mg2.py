@@ -126,7 +126,7 @@ maxgscore = mx*my-1
 if len(sys.argv) > 1:
 	mode = sys.argv[1]
 
-def RFAS(testNum, filename, count, dataType=None):
+def RFAS(testNum, filename, count, dataType=None, write=False):
 	global maze, openSet, closedSet, gscore, fscore, tree, foundblocks, hscore
 
 	# if dataType != None:
@@ -178,9 +178,10 @@ def RFAS(testNum, filename, count, dataType=None):
 				computePath(maze.start,maze.goal)
 			end = time.time()
 			print('astar calculation took: ' + str(end-start))
-			with open(filename, 'a') as csvfile:
-				writer = csv.writer(csvfile, delimiter=',')
-				writer.writerow([count, testNum, str(end-start)])
+			if write:
+				with open(filename, 'a') as csvfile:
+					writer = csv.writer(csvfile, delimiter=',')
+					writer.writerow([count, testNum, str(end-start)])
 		else:
 			for points in total_path:
 				if points in foundblocks:
@@ -191,24 +192,27 @@ def RFAS(testNum, filename, count, dataType=None):
 						computePath(maze.start,maze.goal)
 					end = time.time()
 					print('astar calculation took: ' + str(end-start))
-					with open(filename, 'a') as csvfile:
-						writer = csv.writer(csvfile, delimiter=',')
-						writer.writerow([count, testNum, str(end-start)])
+					if write:
+						with open(filename, 'a') as csvfile:
+							writer = csv.writer(csvfile, delimiter=',')
+							writer.writerow([count, testNum, str(end-start)])
 			if(pointEquals(maze.start,total_path[0])):
 				total_path.pop(0)
 			maze.start = total_path.pop(0)
 
 		if openSet.empty():
 			print ("I cannot reach the target")
-			with open(filename, 'a') as csvfile:
-				writer = csv.writer(csvfile, delimiter=',')
-				writer.writerow(["FAIL", "FAIL", "FAIL"])
+			if write:
+				with open(filename, 'a') as csvfile:
+					writer = csv.writer(csvfile, delimiter=',')
+					writer.writerow(["FAIL", "FAIL", "FAIL"])
 			return -1
 	else:
 		print('I am at the target')
-		with open(filename, 'a') as csvfile:
-			writer = csv.writer(csvfile, delimiter=',')
-			writer.writerow(["DONE","DONE","DONE"])
+		if write:
+			with open(filename, 'a') as csvfile:
+				writer = csv.writer(csvfile, delimiter=',')
+				writer.writerow(["DONE","DONE","DONE"])
 		return 1
 
 def computePath(start, goal):
@@ -305,10 +309,11 @@ def main():
 
 	filename = 'data/' + dataType + '/test' + testNum + '.csv'
 	#cleaning files for record keeping
-	try:
-	    os.remove(filename)
-	except OSError:
-	    pass
+	# i:
+	# try:
+	#     os.remove(filename)
+	# except OSError:
+	#     pass
 
 	while(pointEquals(maze.start,maze.goal)):
 			maze.goal = randomPoint(mx,my)
@@ -404,7 +409,7 @@ def main():
 
 def test(testNum='-1', mode=""):
 	#pass in testcase number as string, returns 2d array
-	if testNum == -1:
+	if testNum == '-1':
 		testNum = input("Please specify testcase to perform A* on (1-50): ")
 
 	maze.maze = test_to_array(testNum)
@@ -415,11 +420,13 @@ def test(testNum='-1', mode=""):
 	#print('\n')
 	#print('[{}]'.format(',\n'.join(['[{}]'.format(','.join(['{}'.format(item) for item in row])) for row in maze.maze])))
 	maze.start = startPoint(testNum)
+	# print (maze.start)
 	maze.maze[maze.start[0]][maze.start[1]] = 1
 
 
 	maze.goal = goalPoint(testNum)
 	count = 1
+	write = True
 	# if len(sys.argv) > 1:
 	# 	dataType = sys.argv[1]
 	# else:
@@ -428,6 +435,7 @@ def test(testNum='-1', mode=""):
 		dataType = 'normal'
 	else:
 		dataType = mode
+		print(dataType)
 
 	filename = 'data/' + dataType + '/test' + testNum + '.csv'
 	#cleaning files for record keeping
@@ -442,14 +450,14 @@ def test(testNum='-1', mode=""):
 
 	status = 0
 	while status != -1 and status != 1:
-		status = RFAS(testNum, filename, count, mode)
+		status = RFAS(testNum, filename, count, mode, write)
 		count += 1
 
 	if status == 1:
-		print ("Goal found")
+		return "goal found"
 	else:
-		print ("goal not reached")
+		return "goal not reached"
 
 if __name__ == "__main__":
-	# main()
-	test()
+	main()
+	# test()
