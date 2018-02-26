@@ -155,14 +155,12 @@ def RFAS(testNum, filename, count, dataType=None, write=False):
 		closedSet = set()
 		if not mode:
 			openSet.put(maze.start,fscore[maze.start])
-		if mode == "highg":
+		if mode == "highg" or mode == "adaptive":
 			openSet.put(maze.start,maxgscore*fscore[maze.start] - gscore[maze.start])
 		if mode == "lowg":
 			openSet.put(maze.start,maxgscore*fscore[maze.start] + gscore[maze.start])
 		if mode == "back":
 			openSet.put(maze.goal,fscore[maze.goal])
-		if mode == "adaptive":
-			openSet.put(maze.start,fscore[maze.start])
 		#updates observed blockings
 		for i in range(4):
 			next = (maze.start[0] + dx[i], maze.start[1] + dy[i])
@@ -247,9 +245,9 @@ def computePath(start, goal):
 				else:
 					fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 				tree[succ] = current
-				if not mode or mode == "back" or mode == "adaptive":
+				if not mode or mode == "back":
 					openSet.put(succ, fscore[succ])
-				if mode == "highg":
+				if mode == "highg" or mode == "adaptive":
 					openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
 				if mode == "lowg":
 					openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
@@ -265,9 +263,9 @@ def computePath(start, goal):
 					else:
 						fscore[succ] = gscore[succ] + heuristic_func(succ,maze.goal)
 					openSet.remove(succ)
-					if not mode or mode == "back" or mode == "adaptive":
+					if not mode or mode == "back":
 						openSet.put(succ, fscore[succ])
-					if mode == "highg":
+					if mode == "highg" or mode == "adaptive":
 						openSet.put(succ, maxgscore*fscore[succ]-gscore[succ])
 					if mode == "lowg":
 						openSet.put(succ, maxgscore*fscore[succ]+gscore[succ])
