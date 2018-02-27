@@ -24,7 +24,7 @@ def main():
         # time.sleep(1)
     # while True:
     testNum = input("Please specify testcase to perform A* on (1-50): ")
-    print(test(str(testNum)),"highg")
+    print(test(str(testNum)),"adaptive")
 
 def combine():
     dataType = "normal"

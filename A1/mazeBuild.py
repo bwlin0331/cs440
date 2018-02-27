@@ -110,16 +110,16 @@ def goalPoint(version):
 
 def main():
 	# writing test cases - stored in directory labeled above
-	# for i in range(50):
-	# 	version = i+1
-	# 	create_testcase(version)
+	for i in range(50):
+		version = i+1
+		create_testcase(version)
 
 	# test_num = input("which test case number (1-50) would you like to run?  ")
 	# print(test_to_array(test_num))
 	#
 	# print(startPoint('3'))
 	# print(goalPoint('3'))
-	create_testcase(100)
+	# create_testcase(100)
 	tasks = None
 
 
