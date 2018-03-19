@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 MAR 2018 12:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  19 MAR 2018 19:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -619,24 +619,112 @@ Package pdftex.def Info: RutgersLogo.png used on input line 39.
  [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./Rutge
-rsLogo.png>] (./Report.aux) ) 
+rsLogo.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 48--56
+
+ []
+
+<Question2.png, id=15, 376.40625pt x 159.59625pt>
+File: Question2.png Graphic file (type png)
+ <use Question2.png>
+Package pdftex.def Info: Question2.png used on input line 60.
+(pdftex.def)             Requested size: 234.8775pt x 99.59154pt.
+ [1 <./Question2.png>] (/usr/local/texlive/2017/texmf-dist/tex/latex/ucs/data/u
+ni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+)
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--89
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 90--91
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
+
+ []
+
+[2] <Question4.png, id=24, 170.6375pt x 151.56625pt>
+File: Question4.png Graphic file (type png)
+ <use Question4.png>
+Package pdftex.def Info: Question4.png used on input line 100.
+(pdftex.def)             Requested size: 234.8775pt x 208.63896pt.
+
+[3 <./Question4.png>] <Question6a.png, id=29, 394.47375pt x 232.87pt>
+File: Question6a.png Graphic file (type png)
+
+<use Question6a.png>
+Package pdftex.def Info: Question6a.png used on input line 114.
+(pdftex.def)             Requested size: 234.8775pt x 138.65352pt.
+ <Question6b.png, id=30, 381.425pt x 193.72375pt>
+File: Question6b.png Graphic file (type png)
+
+<use Question6b.png>
+Package pdftex.def Info: Question6b.png used on input line 120.
+(pdftex.def)             Requested size: 234.8775pt x 119.29163pt.
+ [4 <./Question6a.png> <./Question6b.png>]
+(/usr/local/texlive/2017/texmf-dist/tex/latex/ucs/data/uni-34.def
+File: uni-34.def 2013/05/13 UCS: Unicode data U+2200..U+22FF
+)
+Underfull \hbox (badness 10000) in paragraph at lines 127--133
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 127--133
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--141
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--141
+
+ []
+
+[5] <Question9.png, id=42, 428.60126pt x 496.85625pt>
+File: Question9.png Graphic file (type png)
+ <use Question9.png>
+Package pdftex.def Info: Question9.png used on input line 156.
+(pdftex.def)             Requested size: 375.80544pt x 435.65791pt.
+
+[6] [7 <./Question9.png>] (./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 13702 strings out of 492995
- 268419 string characters out of 6132704
- 327184 words of memory out of 5000000
- 16972 multiletter control sequences out of 15000+600000
- 9511 words of font info for 34 fonts, out of 8000000 for 9000
+ 14631 strings out of 492995
+ 278760 string characters out of 6132704
+ 330184 words of memory out of 5000000
+ 17890 multiletter control sequences out of 15000+600000
+ 10117 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,5n,68p,449b,233s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmti12.pfb>
-Output written on Report.pdf (1 page, 107409 bytes).
+ 62i,6n,68p,793b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/local/texlive/2017/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2017/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2017/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmti12.pfb>
+Output written on Report.pdf (8 pages, 370593 bytes).
 PDF statistics:
- 29 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 75 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 18 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 43 words of extra memory for PDF output out of 10000 (max. 10000000)
 
